@@ -25,26 +25,31 @@ void data_task(void *p) {
 
 void process_task(void *p) {
     int data = 0;
+    int lista[5] = {0};
+    int j = 0;
+    int soma = 0;
 
     while (true) {
         if (xQueueReceive(xQueueData, &data, 100)) {
-            // implementar filtro aqui!
-            int filter;
-            int filtered_data[5] = {};
-            for (int i = 0; i < 5; i++) {
-                filtered_data[i] = data;
+            lista[j] = data;
+            j = (j+1) % 5;
+
+            int media = 0;
+            soma = 0;
+            for(int x = 0; x < 5; x++) {
+                soma += lista[x];
             }
-            for(int j = 0; j<5; j++){
-                filter += filtered_data[j];
-            }
-            filter = filter/5;
-            printf("Data: %d, Filter: %d\n", data, filter);
+
+            media = soma / 5.0;
+
+            printf("%d\n", media);
 
             // deixar esse delay!
             vTaskDelay(pdMS_TO_TICKS(50));
         }
     }
 }
+
 
 int main() {
     stdio_init_all();
